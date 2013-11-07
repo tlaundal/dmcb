@@ -43,21 +43,19 @@ def generate_big(adress, port, name):
     info = dict()
     try:
         info = network.get_server_info(adress, int(port));
-        font.render((5,44),font.parse(info['motd']), image)
+        font.render((5,44),font.parse(info['description']), image)
         
-        player_str = "§7" + str(info['players']) + "§8/§7" + str(info['max_players'])
+        player_str = "§7" + str(info['players']['online']) + "§8/§7" + str(info['players']['max'])
         players = font.parse(player_str)
         players_width = font.get_width(players)
         font.render((image.size[0]-10-players_width,44), players, image)
         
-        version_str = "§7" + info['minecraft_version']
+        version_str = "§7" + info['version']['name']
         version = font.parse(version_str)
         version_width = font.get_width(version)
         font.render((image.size[0]-55-version_width,11), version, image)
-    except gaierror:
-        font.render((5,44),font.parse("§4Can't reach server"), image)
     except Exception as ex:
-        return ex
+        font.render((5,44),font.parse("§4Can't reach server"), image)
     
     ping = parse_ping(info.get('ping', -1))    
     draw_ping(drawer, (image.size[0]-47,7), ping)
