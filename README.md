@@ -3,8 +3,9 @@
 **A Dynamic Minecraft Banner**
 
 ### Installation:
-create a virtualenv, and apply it
-run install.sh as sudo
+create a virtualenv, and apply it. and run:
+
+    pip install -r requirements.txt
 
 Then configure your webserver with one of the dmcb files, some info may be found here: http://flask.pocoo.org/docs/deploying/
 I do not provide support for setting up your web server.
@@ -20,4 +21,5 @@ or
 
 > \<webserver url\>/\<server name\>/\<server adress\>/\<server port\>/banner.png
 
-"webserver url" is the url you configured for you webserver or 127.0.0.1:5000 if you just used "python dmcb.py"
+"webserver url" is the url you configured for you webserver or 127.0.0.1:5000 if you just used "python dmcb.py". Colors 
+may be used in the server name by using the codes from here: http://www.minecraftwiki.net/wiki/Formatting_codes Bold text works too
