@@ -1,0 +1,13 @@
+# Image tool
+Pillow==2.2.1
+
+# Network tool
+dnspython3==1.11.1
+
+# Web framework
+Flask==0.10.1
+Jinja2==2.7.1
+MarkupSafe==0.18
+Werkzeug==0.9.4
+itsdangerous==0.23
+-e git+https://github.com/thadeusb/flask-cache.git@18cd9ebd#egg=flask-cache
