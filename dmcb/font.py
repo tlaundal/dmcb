@@ -1,6 +1,8 @@
 # Package: dmcb
 # Imports from pillow
 from PIL import Image, ImageDraw, ImageFont
+# Imports from our package
+from dmcb import get_path
 
 class _CharRenderer:
     ''' A class to render single characters at correct height
@@ -25,10 +27,10 @@ class _CharRenderer:
         self.drawer.rectangle((0,0,300,100), (255,255,255,0))
 
 # Load the fonts
-font_regular = ImageFont.truetype("static/font/regular.ttf", 24)
-font_bold = ImageFont.truetype("static/font/bold.ttf", 24)
-font_italics = ImageFont.truetype("static/font/italics.ttf", 24)
-font_bold_italics = ImageFont.truetype("static/font/bold-italics.ttf", 24)
+font_regular = ImageFont.truetype(get_path("static/font/regular.ttf"), 24)
+font_bold = ImageFont.truetype(get_path("static/font/bold.ttf"), 24)
+font_italics = ImageFont.truetype(get_path("static/font/italics.ttf"), 24)
+font_bold_italics = ImageFont.truetype(get_path("static/font/bold-italics.ttf"), 24)
 
 renderer_regular = _CharRenderer(font_regular)
 renderer_bold = _CharRenderer(font_bold)
@@ -37,7 +39,7 @@ renderer_bold_italics = _CharRenderer(font_bold_italics)
 
 # Create the color codes. The loop is parsed form the original Minecraft 
 # source code
-colorCodes = []
+colorCodes = list()
 for i in range(0, 32):
     j = int((i >> 3 & 1) * 85)
     k = int((i >> 2 & 1) * 170 + j)
@@ -49,7 +51,7 @@ for i in range(0, 32):
         k = int(k/4)
         l = int(l/4)
         i1 = int(i1/4)
-    colorCodes[i] = (k & 255) << 16 | (l & 255) << 8 | i1 & 255     
+    colorCodes.append((k & 255) << 16 | (l & 255) << 8 | i1 & 255)     
 
 def _get_colour(c):
     ''' Get the RGB-tuple for the color

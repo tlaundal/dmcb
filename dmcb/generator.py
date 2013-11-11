@@ -4,10 +4,10 @@ from io import BytesIO
 # Imports from Pillow
 from PIL import Image, ImageDraw
 # Imports from our package
-from dmcb import font, network
+from dmcb import font, network, get_path
 
 # Parse the background texture
-texture = Image.open('static/texture.png') # TODO Should this be changed when deploying with distribute?
+texture = Image.open(get_path('static/texture.png'))
 texture = texture.resize((60,60))
 texture = texture.point(lambda p: p * 0.17)
 
@@ -54,7 +54,7 @@ def banner(name, adress, port=25565, mc_version='1.7'):
         
         # Render the player count
         players = font.parse('§7' + str(info['players']['online'])
-                           + '§8/§7' + str(info['players']['max'])))
+                           + '§8/§7' + str(info['players']['max']))
         players_width = font.get_width(players)
         font.render((image.size[0]-10-players_width, 44), players, image)
         
