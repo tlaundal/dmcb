@@ -1,12 +1,13 @@
-# Imports from Python Standard Library
-from socket import gaierror
+# Package: dmcb
+# Imports from The Python Standard Library
+from io import BytesIO
 # Imports from Pillow
 from PIL import Image, ImageDraw
 # Imports from our package
-import font, network
+from dmcb import font, network
 
 # Parse the background texture
-texture = Image.open("static/texture.png")
+texture = Image.open('static/texture.png') # TODO Should this be changed when deploying with distribute?
 texture = texture.resize((60,60))
 texture = texture.point(lambda p: p * 0.17)
 
@@ -24,44 +25,61 @@ def _repeat(image, pattern):
         x += pw
     return image
 
-def generate_big(name, adress, port=25565, version='1.7'):
-    assert version == '1.7' or version == '1.6'    
+def banner(name, adress, port=25565, mc_version='1.7'):
+    assert mc_version == '1.7' or mc_version == '1.6'
+        
     # Create the image, and past the texture on it
-    image = Image.new("RGB", (660, 120))
+    image = Image.new('RGB', (660, 120))
     _repeat(image, texture)
     drawer = ImageDraw.Draw(image)
     
-    # Render the two strings that should be there no matter what
+    # Render server name
     font.render((5,11), font.parse(name[:25]), image)
-    # This uses the drawers function, because the adress should be in a 
-    # shadow colour
-    drawer.text((5,77),adress+(':'+str(port) if port != 25565 else ""), 
-                fill=(42,42,42), font=font.font_regular)
+    # Render server adress
+    if port != 25565:
+        drawer.text((5,77), adress + ':' + str(port), fill=(42,42,42),
+                    font=font.font_regular)
+    else:
+        drawer.text((5,77), adress, fill=(42,42,42), font=font.font_regular)
     
-    info = dict()
+    # Render the info we need network access for
     try:
-        info = network.get_server_info(adress, port=port, version=version);
-        font.render((5,44),font.parse(info['description'].split('\n')[0][:30]), image)
+        # Fetch the info
+        info = network.get_server_info(adress, port=port, version=mc_version)
         
-        player_str = "§7" + str(info['players']['online']) + "§8/§7" + str(info['players']['max'])
-        players = font.parse(player_str)
+        # Render the MOTD
+        font.render((5,44), 
+                    font.parse(info['description'].split('\n')[0][:30]),
+                    image)
+        
+        # Render the player count
+        players = font.parse('§7' + str(info['players']['online'])
+                           + '§8/§7' + str(info['players']['max'])))
         players_width = font.get_width(players)
-        font.render((image.size[0]-10-players_width,44), players, image)
+        font.render((image.size[0]-10-players_width, 44), players, image)
         
-        version_str = "§7" + info['version']['name']
-        version = font.parse(version_str)
+        # Render the version
+        version = font.parse('§7' + info['version']['name'])
         version_width = font.get_width(version)
-        font.render((image.size[0]-55-version_width,11), version, image)
+        font.render((image.size[0]-55-version_width, 11), version, image)
+        
+        # Render the ping
+        render_ping(drawer, (image.size[0]-47,7), parse_ping(info['ping']))
     except Exception as ex:
-        print('exception:', ex)
+        print(repr(ex))
         font.render((5,44),font.parse("§4Can't reach server"), image)
+        render_ping(drawer, (image.size[0]-47,7), -1)
     
-    ping = parse_ping(info.get('ping', -1))    
-    draw_ping(drawer, (image.size[0]-47,7), ping)
-    
-    return image
+    # Save the image to a BytesIO fake file and return it
+    mem_file = BytesIO()
+    image.save(mem_file, 'PNG')
+    mem_file.seek(0)
+    return mem_file
 
-def draw_ping(drawer, xy, ping):
+def render_ping(drawer, xy, ping):
+    ''' Render the ping to the supplied Drawer object
+    '''
+    # TODO some kind of loop for this
     x, y = xy
     if ping == -1:
         drawer.rectangle([(x+1*4-1,y+5*4),(x+2*4-2,y+7*4-1)], fill=(42,42,42))
@@ -131,10 +149,10 @@ def draw_ping(drawer, xy, ping):
         drawer.rectangle([(x+6*4,y+1*4),(x+7*4-1,y+6*4-1)], fill=(85,255,85))
         drawer.rectangle([(x+9*4-1,y+1*4),(x+10*4-2,y+7*4-1)], fill=(21,63,21))
         drawer.rectangle([(x+8*4,y+0*4),(x+9*4-1,y+6*4-1)], fill=(85,255,85))
-        
-        
     
 def parse_ping(ping):
+    ''' Parse a ping in ms to a format readable by render_ping
+    '''
     if ping < 0:
         return -1
     elif ping < 150:

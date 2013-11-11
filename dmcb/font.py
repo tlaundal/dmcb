@@ -1,9 +1,11 @@
+# Package: dmcb
 # Imports from pillow
 from PIL import Image, ImageDraw, ImageFont
 
 class _CharRenderer:
     ''' A class to render single characters at correct height
     This is needed because Pillow doesn't have info about the character's y offset
+    So if you draw each character for itself with Pillow you'll get 'bumpy' text
     '''
     def __init__(self, font):
         self.font = font
@@ -22,7 +24,7 @@ class _CharRenderer:
         image.paste(char_img, pos, char_img)
         self.drawer.rectangle((0,0,300,100), (255,255,255,0))
 
-    # Load the fonts
+# Load the fonts
 font_regular = ImageFont.truetype("static/font/regular.ttf", 24)
 font_bold = ImageFont.truetype("static/font/bold.ttf", 24)
 font_italics = ImageFont.truetype("static/font/italics.ttf", 24)
@@ -33,9 +35,9 @@ renderer_bold = _CharRenderer(font_bold)
 renderer_italics = _CharRenderer(font_italics)
 renderer_bold_italics = _CharRenderer(font_bold_italics)
 
-    # Create the color codes
-colorCodes = [0] * 32 # Empty array, 31 slots
-# This is ported from the original MC java source:
+# Create the color codes. The loop is parsed form the original Minecraft 
+# source code
+colorCodes = []
 for i in range(0, 32):
     j = int((i >> 3 & 1) * 85)
     k = int((i >> 2 & 1) * 170 + j)
@@ -134,7 +136,7 @@ def get_width(message):
     
     
 def render(pos, message, image):
-    ''' Render the message to the image
+    ''' Render the message to the image with shadow
     The message has to be in the format returned by the parse function
     '''
     x = pos[0]

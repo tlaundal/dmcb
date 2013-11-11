@@ -1,3 +1,5 @@
+# Package: dmcb
+# Imports from The Python Standard Library
 import socket
 from io import BytesIO
 from json import loads as decodejson

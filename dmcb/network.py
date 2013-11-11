@@ -1,34 +1,48 @@
-# Imports from dependency
-from dns import resolver
-# Imports from package
-from mc_protocol import server_status
-
+# Package: dmcb
+# Imports from The Python Standard Library
 from struct import pack
 from time import time
 import socket
+# Imports from dnspython3
+from dns import resolver
+# Imports from package
+from dmcb.mc_protocol import server_status
     
 def pack_string(string):
+    ''' Pack the string so it can be sent to a 1.6 minecraft server
+    '''
     return pack('>h', len(string)) + string.encode('utf-16be')
     
 def get_server_info(host, port=25565, version='1.7', check_srv = True):
-    """Returns the information the client receives when listing servers
-    on the "server-selection" screen.
-    The dict is contains:
-    * protocol_version,
-    * server_version,
-    * motd,
-    * players,
-    * max_players
-    """
+    ''' Get information about a minecraft server
+    The result is a dict which looks like this:
+    {
+        version:
+            {
+                protocol,
+                name
+            },
+        players:
+            {
+                online,
+                max
+            },
+        description,
+        ping
+    }      
+    '''
+    # Version should either be '1.7' or '1.6'
     assert version == '1.7' or version == '1.6'
+    
+    # Check DNS results from the nameservers
     if port == 25565 and check_srv:
         host, port = get_host_port_srv(host)
-        if port == None:
-            port = 25565
     
     if version == '1.7':
+        # 1.7 protocol is in the mc_protocol module
         return server_status(host, port)
     elif version == '1.6':
+        # 1.6 protocol
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(6.0)
         t = int(time()*1000)
@@ -67,11 +81,12 @@ def get_server_info(host, port=25565, version='1.7', check_srv = True):
 def get_host_port_srv(host):
     ''' Get host,port tuple
     Resolve the Minecraft SRV records for the host and return the first host,
-    port pair received from resolve_srv
+    port pair received from resolve_srv, or the host supplied, and 25565 if
+    no srv records where found.
     '''
     for srv in resolve_srv(host):
         return (srv[0], srv[1])
-    return (host, None)
+    return (host, 25565)
             
 def resolve_srv(adress):
     ''' Resolve SRV records
