@@ -25,34 +25,44 @@ cache = Cache(app)
 # Load a config from the environment variable, if it exists
 app.config.from_envvar('DMCB_CONFIG', silent=True)
 
-@app.route('/<name>/<adress>/<int:port>/banner.png')
-@cache.cached(timeout=app.config['TIMEOUT'])
-def banner(name, adress, port):
-    response = big_banner(adress, port, name)
-    if not response:
-        abort(500)
-    return response
-
 @app.route('/<name>/<adress>/banner.png')
 @cache.cached(timeout=app.config['TIMEOUT'])
-def banner2(name, adress):
-    response = big_banner(adress, 0, name)
-    if not response:
-        abort(500)
-    return response
+def name_adress(name, adress):
+    return banner(name, adress)
 
-def big_banner(adress, port, name):
+@app.route('/<name>/<adress>/<int:port>/banner.png')
+@cache.cached(timeout=app.config['TIMEOUT'])
+def name_adress_port(name, adress, port):
+    return banner(name, adress, port=port)
+
+@app.route('/<version>/<name>/<adress>/banner.png')
+@cache.cached(timeout=app.config['TIMEOUT'])
+def version_name_adress(version, name, adress):
+    if not (version == '1.7' or version == '1.6'):
+        abort(404)
+        return
+    return banner(name, adress, version=version)
+
+@app.route('/<version>/<name>/<adress>/<int:port>/banner.png')
+@cache.cached(timeout=app.config['TIMEOUT'])
+def version_name_adress_port(version, name, adress, port):
+    if not (version == '1.7' or version == '1.6'):
+        abort(404)
+        return
+    return banner(name, adress, port=port, version=version)
+
+def banner(name, adress, port=25565, version='1.7'):
     ''' Get the apropiate response for a banner with the credentials
     '''
     app.logger.debug("Regenerating banner")
-    image = generate_big(adress, port, name)
+    image = generate_big(name, adress, port=port, version=version)
     if type(image) != Image:
-        abort(500)
-        return
+        return False
     byteio = BytesIO()
     image.save(byteio, "PNG")
     byteio.seek(0)
     return send_file(byteio, mimetype='image/png')
+    
 
 # If the script is run itself, start a debug server
 if __name__ == '__main__':

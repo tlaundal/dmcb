@@ -24,10 +24,8 @@ def _repeat(image, pattern):
         x += pw
     return image
 
-def generate_big(adress, port, name):
-    if port == 0 or port == None:
-        port = 25565
-        
+def generate_big(name, adress, port=25565, version='1.7'):
+    assert version == '1.7' or version == '1.6'    
     # Create the image, and past the texture on it
     image = Image.new("RGB", (660, 120))
     _repeat(image, texture)
@@ -42,7 +40,7 @@ def generate_big(adress, port, name):
     
     info = dict()
     try:
-        info = network.get_server_info(adress, int(port));
+        info = network.get_server_info(adress, port=port, version=version);
         font.render((5,44),font.parse(info['description'].split('\n')[0]), image)
         
         player_str = "§7" + str(info['players']['online']) + "§8/§7" + str(info['players']['max'])
@@ -55,6 +53,7 @@ def generate_big(adress, port, name):
         version_width = font.get_width(version)
         font.render((image.size[0]-55-version_width,11), version, image)
     except Exception as ex:
+        print('exception:', ex)
         font.render((5,44),font.parse("§4Can't reach server"), image)
     
     ping = parse_ping(info.get('ping', -1))    
