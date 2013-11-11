@@ -41,7 +41,7 @@ def generate_big(name, adress, port=25565, version='1.7'):
     info = dict()
     try:
         info = network.get_server_info(adress, port=port, version=version);
-        font.render((5,44),font.parse(info['description'].split('\n')[0]), image)
+        font.render((5,44),font.parse(info['description'].split('\n')[0][:30]), image)
         
         player_str = "§7" + str(info['players']['online']) + "§8/§7" + str(info['players']['max'])
         players = font.parse(player_str)
