@@ -11,5 +11,5 @@ setup(
     include_package_data=True,
     zip_safe=False,
     dependency_links=[str(req_line.url) for req_line in install_reqs],
-    install_requires=[str(ir.req) for ir in install_reqs]
+    install_requires=[str(ir.req) for ir in install_reqs if not ir.req == None]
 )
