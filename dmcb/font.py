@@ -20,7 +20,7 @@ class _CharRenderer:
         full_width, full_height = self.font.getsize(self.fill + character)
         char_width = full_width - self.fill_width
         
-        self.drawer.text((0,0), self.fill+character, fill=color, font=self.font)
+        self.drawer.text((0,-9), self.fill+character, fill=color, font=self.font)
                 
         char_img = self.image.crop((self.fill_width,0, full_width,full_height))
         image.paste(char_img, pos, char_img)

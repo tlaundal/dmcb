@@ -22,7 +22,7 @@ def version_name_adress(version, name, adress):
     if not (version == '1.7' or version == '1.6'):
         abort(404)
         return
-    return send_file(generator.banner(name, adress, version=version), mimetype="image/png", as_attachment=False)
+    return send_file(generator.banner(name, adress, mc_version=version), mimetype="image/png", as_attachment=False)
 
 #@cache.cached(timeout=app.config['TIMEOUT'])
 @app.route('/<version>/<name>/<adress>/<int:port>/banner.png')
@@ -30,5 +30,5 @@ def version_name_adress_port(version, name, adress, port):
     if not (version == '1.7' or version == '1.6'):
         abort(404)
         return
-    return send_file(generator.banner(name, adress, port=port, version=version), mimetype="image/png", as_attachment=False)
+    return send_file(generator.banner(name, adress, port=port, mc_version=version), mimetype="image/png", as_attachment=False)
     
