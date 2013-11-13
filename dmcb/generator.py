@@ -49,7 +49,7 @@ def banner(name, adress, port=25565, mc_version='1.7'):
         
         # Render the MOTD
         font.render((5,44), 
-                    font.parse(info['description'].split('\n')[0][:30]),
+                    font.parse(info['description'].split('\n')[0]),
                     image)
         
         # Render the player count
