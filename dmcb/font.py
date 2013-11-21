@@ -1,13 +1,13 @@
 # Package: dmcb
-# Imports from pillow
 from PIL import Image, ImageDraw, ImageFont
-# Imports from our package
+
 from dmcb import get_path
 
 class _CharRenderer:
     ''' A class to render single characters at correct height
-    This is needed because Pillow doesn't have info about the character's y offset
-    So if you draw each character for itself with Pillow you'll get 'bumpy' text
+    This is needed because Pillow doesn't have info about the 
+    character's y offset, so if you draw each character for itself
+    with Pillow you'll get 'bumpy' text
     '''
     def __init__(self, font):
         self.font = font
@@ -20,9 +20,11 @@ class _CharRenderer:
         full_width, full_height = self.font.getsize(self.fill + character)
         char_width = full_width - self.fill_width
         
-        self.drawer.text((0,-9), self.fill+character, fill=color, font=self.font)
+        self.drawer.text((0,-9), self.fill+character, fill=color, 
+                         font=self.font)
                 
-        char_img = self.image.crop((self.fill_width,0, full_width,full_height))
+        char_img = self.image.crop((self.fill_width,0, full_width,
+                                    full_height))
         image.paste(char_img, pos, char_img)
         self.drawer.rectangle((0,0,300,100), (255,255,255,0))
 
@@ -30,7 +32,8 @@ class _CharRenderer:
 font_regular = ImageFont.truetype(get_path("static/font/regular.ttf"), 24)
 font_bold = ImageFont.truetype(get_path("static/font/bold.ttf"), 24)
 font_italics = ImageFont.truetype(get_path("static/font/italics.ttf"), 24)
-font_bold_italics = ImageFont.truetype(get_path("static/font/bold-italics.ttf"), 24)
+font_bold_italics = ImageFont.truetype(
+                        get_path("static/font/bold-italics.ttf"), 24)
 
 renderer_regular = _CharRenderer(font_regular)
 renderer_bold = _CharRenderer(font_bold)
@@ -102,7 +105,8 @@ def parse(message):
     ''' Parse the message in a format readable by render
     this will return a touple like this:
     [((int,int),str,str)]
-    so if you where to send it directly to the rederer you have to do this:
+    so if you where to send it directly to the rederer you have to do 
+    this:
     render(pos, parse(message), drawer)
     '''
     result = []
@@ -127,7 +131,8 @@ def parse(message):
             continue
         width, height = _get_font(bold, italics).getsize(message[i])
         total_width += width
-        result.append(((width, height), lastColour, bold, italics, message[i]))
+        result.append(((width, height), lastColour, bold, italics, 
+                        message[i]))
     return result
  
 def get_width(message):

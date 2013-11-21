@@ -1,10 +1,10 @@
 # Package: dmcb
-# Imports from The Python Standard Library
 from io import BytesIO
-# Imports from Pillow
+
 from PIL import Image, ImageDraw
-# Imports from our package
-from dmcb import font, network, get_path
+
+from dmcb import font, network, get_path, app, cache
+
 
 # Parse the background texture
 texture = Image.open(get_path('static/texture.png'))
@@ -25,8 +25,10 @@ def _repeat(image, pattern):
         x += pw
     return image
 
+@cache.memoize(timeout=app.config['TIMEOUT'])
 def banner(name, adress, port=25565, mc_version='1.7'):
     assert mc_version == '1.7' or mc_version == '1.6'
+    print("a")
         
     # Create the image, and past the texture on it
     image = Image.new('RGB', (660, 120))
@@ -87,13 +89,17 @@ def render_ping(drawer, xy, ping):
     if (ping == 1):
         fills = [f21_63_21,f85_255_85,f42,f85,f42,f85,f42,f85,f42,f85]
     elif (ping == 2):
-        fills = [f21_63_21,f85_255_85,f21_63_21,f85_255_85,f42,f85,f42,f85,f42,f85]
+        fills = [f21_63_21,f85_255_85,f21_63_21,f85_255_85,f42,f85,f42,f85,
+                 f42,f85]
     elif (ping == 3):
-        fills = [f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,f85_255_85,f42,f85,f42,f85]
+        fills = [f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,
+                 f85_255_85,f42,f85,f42,f85]
     elif (ping == 4):
-        fills = [f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,f85_255_85,f42,f85]
+        fills = [f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,
+                 f85_255_85,f21_63_21,f85_255_85,f42,f85]
     elif (ping == 5):
-        fills = [f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,f85_255_85]
+        fills = [f21_63_21,f85_255_85,f21_63_21,f85_255_85,f21_63_21,
+                 f85_255_85,f21_63_21,f85_255_85,f21_63_21,f85_255_85]
     else:
         fills = [f42,f85,f42,f85,f42,f85,f42,f85,f42,f85]
 

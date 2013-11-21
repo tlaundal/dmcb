@@ -1,11 +1,10 @@
 # Package: dmcb
-# Imports from The Python Standard Library
 from struct import pack
 from time import time
 import socket
-# Imports from dnspython3
+
 from dns import resolver
-# Imports from package
+
 from dmcb.mc_protocol import server_status
     
 def pack_string(string):
@@ -80,9 +79,9 @@ def get_server_info(host, port=25565, version='1.7', check_srv = True):
      
 def get_host_port_srv(host):
     ''' Get host,port tuple
-    Resolve the Minecraft SRV records for the host and return the first host,
-    port pair received from resolve_srv, or the host supplied, and 25565 if
-    no srv records where found.
+    Resolve the Minecraft SRV records for the host and return the first
+    host, port pair received from resolve_srv, or the host supplied 
+    and 25565 if no srv records where found.
     '''
     for srv in resolve_srv(host):
         return (srv[0], srv[1])
@@ -90,8 +89,8 @@ def get_host_port_srv(host):
             
 def resolve_srv(adress):
     ''' Resolve SRV records
-    Get all the SRV records for the adress and return them in an ordered array
-    of tuples, with target adress and port
+    Get all the SRV records for the adress and return them in an 
+    ordered array of tuples, with target adress and port
     RETURNS an array
     '''
     try:

@@ -1,5 +1,6 @@
 # __init__ file in dmcb package
 import os
+
 from flask import Flask
 from flask.ext.cache import Cache
 
