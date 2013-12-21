@@ -28,7 +28,6 @@ def _repeat(image, pattern):
 @cache.memoize(timeout=app.config['TIMEOUT'])
 def banner(name, adress, port=25565, mc_version='1.7'):
     assert mc_version == '1.7' or mc_version == '1.6'
-    print("a")
         
     # Create the image, and past the texture on it
     image = Image.new('RGB', (660, 120))
@@ -49,9 +48,15 @@ def banner(name, adress, port=25565, mc_version='1.7'):
         # Fetch the info
         info = network.get_server_info(adress, port=port, version=mc_version)
         
+        motd = info['description']
+        if type(motd) == dict:
+            motd = motd['text']
+        if '\n' in motd:
+            motd = motd.split('\n')[0]
+
         # Render the MOTD
         font.render((5,44), 
-                    font.parse(info['description'].split('\n')[0]),
+                    font.parse(motd),
                     image)
         
         # Render the player count
@@ -68,7 +73,6 @@ def banner(name, adress, port=25565, mc_version='1.7'):
         # Render the ping
         render_ping(drawer, (image.size[0]-47,7), parse_ping(info['ping']))
     except Exception as ex:
-        print(repr(ex))
         font.render((5,44),font.parse("§4Can't reach server"), image)
         render_ping(drawer, (image.size[0]-47,7), -1)
     
