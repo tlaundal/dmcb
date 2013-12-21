@@ -123,6 +123,8 @@ def parse(message):
         elif message[i-1] == '§':
             if message[i] in "01234567890abcdef":
                 lastColour = message[i]
+                bold = False
+                italics = False
             if message[i] == 'l':
                 bold = True
             if message[i] == 'o':
