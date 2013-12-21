@@ -127,7 +127,8 @@ def parse(message):
                 bold = True
             if message[i] == 'o':
                 italics = True
-            if message[i] == 'r' or message[i] == 'e':
+
+            if message[i] == 'r':
                 bold = False
                 italics = False
                 lastColour = message[i]  
