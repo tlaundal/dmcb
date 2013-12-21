@@ -11,7 +11,7 @@ app = Flask(__name__)
 # Create a simple config
 app.config.update(dict(
     CACHE_TYPE= 'simple',
-    TIMEOUT= 5))
+    TIMEOUT= 0))
 # Load config from file supplied in environment variable
 app.config.from_envvar('DMCB_CONFIG', silent=True)
 # Init the cache

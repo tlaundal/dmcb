@@ -9,18 +9,19 @@ class _CharRenderer:
     character's y offset, so if you draw each character for itself
     with Pillow you'll get 'bumpy' text
     '''
-    def __init__(self, font):
+    def __init__(self, font, offset=6):
         self.font = font
         self.image = Image.new("RGBA", (300,100), (255,255,255,0))
         self.drawer = ImageDraw.Draw(self.image)
-        self.fill = ' 0 '
+        self.fill = ' 0j '
         self.fill_width = font.getsize(self.fill)[0]
+        self.offset = offset
         
     def render(self, image, pos, character, color=(255,255,255)):
         full_width, full_height = self.font.getsize(self.fill + character)
         char_width = full_width - self.fill_width
         
-        self.drawer.text((0,-9), self.fill+character, fill=color, 
+        self.drawer.text((0,-self.offset), self.fill+character, fill=color, 
                          font=self.font)
                 
         char_img = self.image.crop((self.fill_width,0, full_width,
@@ -29,16 +30,18 @@ class _CharRenderer:
         self.drawer.rectangle((0,0,300,100), (255,255,255,0))
 
 # Load the fonts
-font_regular = ImageFont.truetype(get_path("static/font/regular.ttf"), 24)
-font_bold = ImageFont.truetype(get_path("static/font/bold.ttf"), 24)
-font_italics = ImageFont.truetype(get_path("static/font/italics.ttf"), 24)
+font_regular = ImageFont.truetype(get_path("static/font/regular.ttf"), 16)
+font_bold = ImageFont.truetype(get_path("static/font/bold.ttf"), 16)
+font_italics = ImageFont.truetype(get_path("static/font/italics.ttf"), 16)
 font_bold_italics = ImageFont.truetype(
-                        get_path("static/font/bold-italics.ttf"), 24)
+                        get_path("static/font/bold-italics.ttf"), 16)
+font_small = ImageFont.truetype(get_path("static/font/regular.ttf"), 12)
 
 renderer_regular = _CharRenderer(font_regular)
 renderer_bold = _CharRenderer(font_bold)
 renderer_italics = _CharRenderer(font_italics)
 renderer_bold_italics = _CharRenderer(font_bold_italics)
+renderer_small = _CharRenderer(font_small, 4)
 
 # Create the color codes. The loop is parsed form the original Minecraft 
 # source code
@@ -139,8 +142,7 @@ def get_width(message):
     ''' Calculate the width of the message
     The message has to be in the format returned by the parse funtion
     '''
-    return sum([i[0][0] for i in message])
-    
+    return sum([i[0][0] for i in message])    
     
 def render(pos, message, image):
     ''' Render the message to the image with shadow
@@ -151,7 +153,17 @@ def render(pos, message, image):
     for i in message:
         (width, height), colour, bold, italics, char = i
         renderer = _get_renderer(bold, italics)
-        renderer.render(image, (x+3,y+3), char, color=_get_shadow(colour))
         renderer.render(image, (x,y), char, color=_get_colour(colour))
         x += width
         
+def render_small(pos, message, image):
+    ''' Render the message to the image with shadow
+    The message has to be in the format returned by the parse function
+    '''
+    x = pos[0]
+    y = pos[1]
+    for i in message:
+        (width, height), colour, bold, italics, char = i
+        renderer = renderer_small
+        renderer.render(image, (x,y), char, color=_get_colour(colour))
+        x += width
