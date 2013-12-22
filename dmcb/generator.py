@@ -81,7 +81,6 @@ def banner(name, adress, port=25565):
     
     y_offset = int(margin + (icon_size - text_size*3)/2) # 7
     font.render((text_offset, y_offset), server_name, image)
-    print(repr(motd))
     font.render((text_offset, y_offset + text_size), font.parse(motd[0]), image)
     if len(motd) > 1:
         font.render((text_offset, y_offset + text_size*2), font.parse(motd[1]), image)
