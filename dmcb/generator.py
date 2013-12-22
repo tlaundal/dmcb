@@ -42,11 +42,10 @@ def banner(name, adress, port=25565):
         if type(motd) == dict:
             motd = motd['text']
         if '\n' in motd:
-            motd = [font.parse(line) for line in motd.split('\n')]
+            motd = motd.split('\n')
         else:
-            motd  = font.parse(motd)
-            if (len(motd) > 45 ):
-                motd = [motd[:64], motd[64:]]
+            if len(motd) > 45:
+                motd = [motd[:45], motd[45:]]
             else:
                 motd = [motd]
 
@@ -60,31 +59,43 @@ def banner(name, adress, port=25565):
             icon.load()
 
     except (error, herror, gaierror, timeout, AssertionError) as ex:
-        motd = [font.parse("§4Can't reach server")]
+        motd = ["§4Can't reach server"]
         players = []
         icon = None
         ping = -1
 
     # Create the image, and past the texture on it
-    image = Image.new('RGB', (620, 74))
+    icon_size = 64
+    margin = 5
+    width = 620
+    heigth = icon_size + margin*2
+    text_offset = icon_size + margin*2
+    text_size = 20
+    if icon == None:
+        width = width - icon_size - margin
+        text_offset = margin
+
+    image = Image.new('RGB', (width, heigth))
     _repeat(image, texture)
     drawer = ImageDraw.Draw(image)
     
-    font.render((80, 7), server_name, image)
-    font.render((80, 27), motd[0], image)
-    if type(motd[0]) == list and len(motd) > 1:
-        font.render((80, 47), motd[1], image)
+    y_offset = int(margin + (icon_size - text_size*3)/2) # 7
+    font.render((text_offset, y_offset), server_name, image)
+    print(repr(motd))
+    font.render((text_offset, y_offset + text_size), font.parse(motd[0]), image)
+    if len(motd) > 1:
+        font.render((text_offset, y_offset + text_size*2), font.parse(motd[1]), image)
 
     adress_width = font.get_width(server_adress)
-    font.render_small((620-adress_width, 63), server_adress, image)
+    font.render_small((width-margin-adress_width, 63), server_adress, image)
 
     if icon != None:
         image.paste(icon, (5,5), mask=icon)
     
-    render_ping(drawer, (597,5), ping)
+    render_ping(drawer, (width-margin-20,margin), ping)
 
     players_width = font.get_width(players)
-    font.render((590-players_width, 5), players, image)
+    font.render((width-margin-20-margin-players_width, margin), players, image)
 
     # Save the image to a BytesIO fake file and return it
     mem_file = BytesIO()
