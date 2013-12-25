@@ -38,5 +38,5 @@ nosetests.xml
 
 #others
 envs
-start.py
+venv
 start.sh
