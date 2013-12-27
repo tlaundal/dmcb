@@ -4,7 +4,7 @@ from socket import error, herror, gaierror, timeout
 
 from PIL import Image, ImageDraw
 
-from dmcb import font, network, get_path, app, cache
+from dmcb import font, network, get_path
 
 
 # Parse the background texture
@@ -26,7 +26,6 @@ def _repeat(image, pattern):
         x += pw
     return image
 
-@cache.memoize(timeout=app.config['TIMEOUT'])
 def banner(name, adress, port=25565):
     
     # Get all info
@@ -63,7 +62,6 @@ def banner(name, adress, port=25565):
         players = []
         icon = None
         ping = -1
-
     # Create the image, and past the texture on it
     icon_size = 64
     margin = 5
@@ -99,6 +97,7 @@ def banner(name, adress, port=25565):
     # Save the image to a BytesIO fake file and return it
     mem_file = BytesIO()
     image.save(mem_file, 'PNG')
+    del image
     mem_file.seek(0)
     return mem_file
 
