@@ -54,7 +54,7 @@ def banner(name, adress, port=25565):
         ping = parse_ping(info['ping'])
         icon = info['favicon']
         if icon != None:
-            icon = Image.open(icon)
+            icon = Image.open(icon).convert('RGBA')
             icon.load()
 
     except (error, herror, gaierror, timeout, AssertionError) as ex:
