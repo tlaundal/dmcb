@@ -40,3 +40,4 @@ nosetests.xml
 envs
 venv
 start.sh
+.venv

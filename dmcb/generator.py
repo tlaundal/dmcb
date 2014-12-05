@@ -53,7 +53,7 @@ def banner(name, adress, port=25565):
 
         ping = parse_ping(info['ping'])
         icon = info['favicon']
-        if icon != None:
+        if icon is not None:
             icon = Image.open(icon).convert('RGBA')
             icon.load()
 
@@ -69,7 +69,7 @@ def banner(name, adress, port=25565):
     heigth = icon_size + margin*2
     text_offset = icon_size + margin*2
     text_size = 20
-    if icon == None:
+    if icon is None:
         width = width - icon_size - margin
         text_offset = margin
 
@@ -86,7 +86,7 @@ def banner(name, adress, port=25565):
     adress_width = font.get_width(server_adress)
     font.render_small((width-margin-adress_width, 63), server_adress, image)
 
-    if icon != None:
+    if icon is not None:
         image.paste(icon, (5,5), mask=icon)
     
     render_ping(drawer, (width-margin-20,margin), ping)
