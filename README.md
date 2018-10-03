@@ -1,4 +1,4 @@
-#dmcb
+# dmcb
 
 **A Dynamic Minecraft Banner**
 
@@ -23,3 +23,8 @@ or
 
 "webserver url" is the url you configured for you webserver or 127.0.0.1:5000 if you just used "python dmcb.py". Colors 
 may be used in the server name by using the codes from here: http://www.minecraftwiki.net/wiki/Formatting_codes Bold text works too
+
+### Instances:
+> Please note, these instances are unofficial, and may use code different from this repo
+ * MCLive: http://status.mclive.eu/
+ 
