@@ -11,7 +11,7 @@ create a virtualenv, and apply it. Then run:
 
 Configure your webserver with either the `dmcb.wsgi` or `dmcb.cgi` file. Some info may be found here: http://flask.pocoo.org/docs/deploying/.
 
-If you are only going to test this for yourself, you may just do: python dmcb.py
+If you are only going to test this for yourself, you may just do: `python start.py`
 
 ### Usage
 Banners are available with the following URL schema:
