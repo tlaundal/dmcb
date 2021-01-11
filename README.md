@@ -5,7 +5,7 @@
 ![Example banner](https://raw.githubusercontent.com/tlaundal/dmcb/master/skogliv.png)
 
 ### Installation
-create a virtualenv, and apply it. Then run:
+Create a Python 3 virtualenv, and apply it. Then run:
 
     pip install -r requirements.txt
 
