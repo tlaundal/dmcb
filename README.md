@@ -9,7 +9,7 @@ Create a Python 3 virtualenv, and apply it. Then run:
 
     pip install -r requirements.txt
 
-Configure your webserver with either the `dmcb.wsgi` or `dmcb.cgi` file. Some info may be found here: http://flask.pocoo.org/docs/deploying/.
+Configure your webserver with either the `dmcb.wsgi` or `dmcb.cgi` file. Some info may be found in the [flask docs](https://flask.palletsprojects.com/en/0.12.x/deploying/).
 
 If you are only going to test this for yourself, you may just do: `python start.py`
 
